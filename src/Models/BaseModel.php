@@ -759,7 +759,13 @@ class BaseModel extends Model implements CacheInterface
             $this->adaptedConnection->setCache($this);
         }
 
-        return $this->adaptedConnection->getSchema()->getTable($this->table);
+        logger('Table name: ' . $this->table);
+
+        $tmp = $this->adaptedConnection->getSchema()->getTable($this->table);
+
+        logger(print_r($tmp, true));
+
+        return $tmp;
     }
 
     /**
