@@ -20,12 +20,15 @@ class Builder extends EloquentBuilder
      */
     public function getRelation($relation)
     {
+        logger('In Componets/Builder/getRelation');
+        logger('Passed in relation' . print_r($relation, true));
         $query = Relation::noConstraints(
             function () use ($relation){
                 /** @var BaseModel $model */
                 $model = $this->getModel();
                 $relationType = $model->getReferencingType($relation);
-
+                logger('Model: ' . print_r($model, true));
+                logger('Relation Type: ' . print_r($relationType, true));
                 if (RelationSchema::HAS_MANY === $relationType) {
                     return $model->getHasManyByRelationName($relation);
                 } elseif (RelationSchema::MANY_MANY === $relationType) {

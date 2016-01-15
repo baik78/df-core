@@ -742,12 +742,7 @@ class BaseModel extends Model implements CacheInterface
      */
     public function getReferences()
     {
-        $tmp = $this->getTableSchema()->relations;
-
-        logger('Getting references');
-        logger(print_r($tmp, true));
-
-        return $tmp;
+        return $this->getTableSchema()->relations;
     }
 
     /**
@@ -764,13 +759,7 @@ class BaseModel extends Model implements CacheInterface
             $this->adaptedConnection->setCache($this);
         }
 
-        logger('Table name: ' . $this->table);
-
-        $tmp = $this->adaptedConnection->getSchema()->getTable($this->table);
-
-        logger(print_r($tmp, true));
-
-        return $tmp;
+        return $this->adaptedConnection->getSchema()->getTable($this->table);
     }
 
     /**
