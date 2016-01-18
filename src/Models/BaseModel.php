@@ -971,11 +971,9 @@ class BaseModel extends Model implements CacheInterface
      */
     public function getHasManyByRelationName($name)
     {
-        logger('In getHasManyByRelationName');
         $table = $this->getReferencingTable($name);
-        logger('Table : ' . print_r($table, true));
         $mappedTables = array_keys(static::getTableToModelMap());
-        logger('Mapped Tables : ' . print_r($mappedTables, true));
+
         return (!empty($table) && in_array($table, $mappedTables)) ? $this->getHasMany($table, $name) : null;
     }
 
@@ -1146,8 +1144,12 @@ class BaseModel extends Model implements CacheInterface
         if (empty(static::$tableToModelMap)) {
             static::$tableToModelMap = \Cache::get(static::TABLE_TO_MODEL_MAP_CACHE_KEY, []);
             if (empty(static::$tableToModelMap)) {
+                if (empty($system = Service::whereType('system')->first(['id']))) {
+                    throw new NotFoundException("Could not find a service with type 'system'.");
+                }
+
                 static::$tableToModelMap =
-                    DB::table('db_table_extras')->where('service_id', 1)->lists('model', 'table');
+                    DB::table('db_table_extras')->where('service_id', $system->id)->lists('model', 'table');
                 \Cache::add(static::TABLE_TO_MODEL_MAP_CACHE_KEY, static::$tableToModelMap,
                     static::TABLE_TO_MODEL_MAP_CACHE_TTL);
             }
