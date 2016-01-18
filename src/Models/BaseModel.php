@@ -971,9 +971,11 @@ class BaseModel extends Model implements CacheInterface
      */
     public function getHasManyByRelationName($name)
     {
+        logger('In getHasManyByRelationName');
         $table = $this->getReferencingTable($name);
+        logger('Table : ' . print_r($table, true));
         $mappedTables = array_keys(static::getTableToModelMap());
-
+        logger('Mapped Tables : ' . print_r($mappedTables, true));
         return (!empty($table) && in_array($table, $mappedTables)) ? $this->getHasMany($table, $name) : null;
     }
 
